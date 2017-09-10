@@ -1,4 +1,5 @@
 import ICustomer from './interfaces/ICustomer'; // eslint-disable-line
+import Coordinate from '../common/Coordinate';
 
 class Customer {
     _id: string;
@@ -6,6 +7,7 @@ class Customer {
     phone?: string;
     address?: string;
     note?: string;
+    location?: Coordinate;
     promotions: object[];
 
     createdAt?: Date;
@@ -20,6 +22,7 @@ class Customer {
         this.phone = model.phone;
         this.address = model.address;
         this.note = model.note;
+        this.location = model.location;
 
         this.createdAt = model.createdAt;
         this.updatedAt = model.updatedAt;

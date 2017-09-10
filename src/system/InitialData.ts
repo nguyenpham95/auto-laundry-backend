@@ -2,21 +2,26 @@ import UserBusiness from '../app/business/UserBusiness';
 import IUserBusiness from '../app/business/interfaces/IUserBusiness';
 import RoleBusiness from '../app/business/RoleBusiness';
 import IRoleBusiness from '../app/business/interfaces/IRoleBusiness';
+import CustomerBusiness from '../app/business/CustomerBusiness';
+import ICustomerBusiness from '../app/business/interfaces/ICustomerBusiness';
 
 import getRoles from '../resources/initialData/Roles';
 import getRoleClaims from '../resources/initialData/RoleClaims';
 import getUsers from '../resources/initialData/Users';
 import getUserRoles from '../resources/initialData/UserRoles';
+import getCustomers from '../resources/initialData/Customers';
 
 class InitialData {
     private roleBusiness: IRoleBusiness = new RoleBusiness();
     private userBusiness: IUserBusiness = new UserBusiness();
+    private customerBusiness: ICustomerBusiness = new CustomerBusiness();
 
     async init(): Promise<void> {
         await this.initRoles();
         await this.initRoleClaims();
         await this.initUsers();
         await this.initUserRoles();
+        await this.initCustomers();
 
         console.log('Initial Data ===> Done.');
     }
@@ -106,6 +111,21 @@ class InitialData {
         }
 
         console.log(`Initialize user roles have done.`);
+    }
+
+    async initCustomers(): Promise<void> {
+        let list = getCustomers();
+
+        for (let i = 0; i < list.length; i++) {
+            let item = list[i];
+
+            if (item.isRequired || process.env.DATA_TEST) {
+                await this.customerBusiness.create(item.data);
+                console.log(`Customer '${item.data.name}' has created.`);
+            }
+        }
+
+        console.log(`Initialize customers have done.`);
     }
 }
 

@@ -15,6 +15,12 @@ class CustomerSchema {
             phone: String,
             address: String,
             note: String,
+            location: {
+                type: {
+                    latitude: Number,
+                    longitude: Number
+                }
+            },
             promotions: {
                 type: [mongoose.Schema.Types.Mixed],
                 default: []

@@ -11,8 +11,8 @@ class {camelName}Controller extends BaseController {
     constructor() {
         super();
 
-        this.get('/list/:page', this.get{camelName}s.bind(this));
-        this.get('/count', this.getCount{camelName}.bind(this));
+        this.get('/list/:page/:limit', this.get{camelName}s.bind(this));
+        this.get('/list/count', this.getCount{camelName}s.bind(this));
         this.get('/:_id', this.get{camelName}ById.bind(this));
         this.post('/', Authenticator.isAuthenticated, this.create{camelName}.bind(this));
         this.put('/:_id', Authenticator.isAuthenticated, this.update{camelName}.bind(this));
@@ -20,10 +20,10 @@ class {camelName}Controller extends BaseController {
     }
 
     async get{camelName}s(req): Promise<any> {
-        return await this.{pascalName}Business.getList(req.params.page, 10);
+        return await this.{pascalName}Business.getList(req.params.page, req.params.limit);
     }
 
-    async getCount{camelName}(req): Promise<any> {
+    async getCount{camelName}s(req): Promise<any> {
         return await this.{pascalName}Business.getCount();
     }
 

@@ -11,7 +11,8 @@ class RoleController extends BaseController {
     constructor() {
         super();
 
-        this.get('/list/:page', this.getRoles.bind(this));
+        this.get('/list/:page/:limit', this.getRoles.bind(this));
+        this.get('/list/count', this.getCountRoles.bind(this));
         this.get('/:_id', this.getRoleById.bind(this));
         this.post('/', Authenticator.isHandlerRoles('Administrator'), this.createRole.bind(this));
         this.put('/:_id', Authenticator.isHandlerRoles('Administrator'), this.updateRole.bind(this));
@@ -19,7 +20,11 @@ class RoleController extends BaseController {
     }
 
     async getRoles(req): Promise<any> {
-        return await this.roleBusiness.getList(req.params.page, 10);
+        return await this.roleBusiness.getList(req.params.page, req.params.limit);
+    }
+
+    async getCountRoles(req): Promise<any> {
+        return await this.roleBusiness.getCount();
     }
 
     async getRoleById(req): Promise<any> {

@@ -11,7 +11,8 @@ class OrderController extends BaseController {
     constructor() {
         super();
 
-        this.get('/list/:page', this.getOrders.bind(this));
+        this.get('/list/:page/:limit', this.getOrders.bind(this));
+        this.get('/list/count', this.getCountOrders.bind(this));
         this.get('/:_id', this.getOrderById.bind(this));
         this.post('/', Authenticator.isAuthenticated, this.createOrder.bind(this));
         this.put('/:_id', Authenticator.isAuthenticated, this.updateOrder.bind(this));
@@ -19,7 +20,11 @@ class OrderController extends BaseController {
     }
 
     async getOrders(req): Promise<any> {
-        return await this.orderBusiness.getList(req.params.page, 10);
+        return await this.orderBusiness.getList(req.params.page, req.params.limit);
+    }
+
+    async getCountOrders(req): Promise<any> {
+        return await this.orderBusiness.getCount();
     }
 
     async getOrderById(req): Promise<any> {

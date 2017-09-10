@@ -2,13 +2,42 @@ import * as express from 'express';
 
 class BaseController {
     private router: express.Router;
+    protected maxRecords: number = 30;
 
     constructor() {
         this.router = express.Router(); // eslint-disable-line
+
+        let idRegex = /[0-9a-z]{24}/;
+        let numRegex = /^[0-9]{1,9}$/;
+
+        this.router.param('_id', this.validateRegExp(idRegex));
+        this.router.param('page', this.validateRegExp(numRegex, (req, res, next, page) => {
+            if (!page)
+                req.params.page = 1;
+            else if (typeof req.params.page === 'string')
+                req.params.page = Number(req.params.page);
+            next();
+        }));
+        this.router.param('limit', this.validateRegExp(numRegex, (req, res, next, limit) => {
+            if (!limit || limit > this.maxRecords)
+                req.params.limit = this.maxRecords;
+            else if (typeof req.params.limit === 'string')
+                req.params.limit = Number(req.params.limit);
+            next();
+        }));
     }
 
     getRouter() {
         return this.router;
+    }
+
+    private validateRegExp(regex: RegExp, cb?: Function): express.RequestParamHandler {
+        return (req, res, next, val) => {
+            if (regex.test(val))
+                cb ? cb(req, res, next, val) : next();
+            else
+                next('route');
+        };
     }
 
     protected get(path: string, ...handlers: express.RequestHandler[]): void {

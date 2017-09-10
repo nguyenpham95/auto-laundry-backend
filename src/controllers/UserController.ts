@@ -12,19 +12,23 @@ class UserController extends BaseController {
     constructor() {
         super();
 
-        this.get('/profile', Authenticator.isAuthenticated, this.getProfile.bind(this));
-        this.put('/profile', Authenticator.isAuthenticated, this.updateProfile.bind(this));
-
-        this.get('/list/:page', this.getAllUsers.bind(this));
+        this.get('/list/:page/:limit', this.getUsers.bind(this));
+        this.get('/list/count', this.getCountUsers.bind(this));
         this.get('/:_id', this.getUserById.bind(this));
+        this.get('/profile', Authenticator.isAuthenticated, this.getProfile.bind(this));
         this.post('/signup', this.signup.bind(this));
         this.post('/', Authenticator.isHandlerRoles('Administrator'), this.createUser.bind(this));
         this.put('/:_id', Authenticator.isHandlerRoles('Administrator'), this.updateUser.bind(this));
+        this.put('/profile', Authenticator.isAuthenticated, this.updateProfile.bind(this));
         this.delete('/:_id', Authenticator.isHandlerRoles('Administrator'), this.deleteUser.bind(this));
     }
 
-    async getAllUsers(req): Promise<any> {
-        return await this.userBusiness.getList(req.params.page, 10);
+    async getUsers(req): Promise<any> {
+        return await this.userBusiness.getList(req.params.page, req.params.limit);
+    }
+
+    async getCountUsers(req): Promise<any> {
+        return await this.userBusiness.getCount();
     }
 
     async getUserById(req): Promise<any> {

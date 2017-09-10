@@ -11,15 +11,31 @@ class CustomerController extends BaseController {
     constructor() {
         super();
 
-        this.get('/list/:page', this.getCustomers.bind(this));
+        this.post('/search/:page/:limit', this.searchCustomers.bind(this));
+        this.post('/search/count', this.getCountSearch.bind(this));
+        this.get('/list/:page/:limit', this.getCustomers.bind(this));
+        this.get('/list/count', this.getCountCustomers.bind(this));
         this.get('/:_id', this.getCustomerById.bind(this));
-        this.post('/', Authenticator.isAuthenticated, this.createCustomer.bind(this));
+        this.post('/', this.createCustomer.bind(this));
+        // this.post('/', Authenticator.isAuthenticated, this.createCustomer.bind(this));
         this.put('/:_id', Authenticator.isAuthenticated, this.updateCustomer.bind(this));
         this.delete('/:_id', Authenticator.isHandlerRoles('Administrator'), this.deleteCustomer.bind(this));
     }
 
+    async searchCustomers(req): Promise<any> {
+        return await this.customerBusiness.search(req.body.name, req.params.page, req.params.limit);
+    }
+
+    async getCountSearch(req): Promise<any> {
+        return await this.customerBusiness.getCountSearch(req.body.name);
+    }
+
     async getCustomers(req): Promise<any> {
-        return await this.customerBusiness.getList(req.params.page, 10);
+        return await this.customerBusiness.getList(req.params.page, req.params.limit);
+    }
+
+    async getCountCustomers(req): Promise<any> {
+        return await this.customerBusiness.getCount();
     }
 
     async getCustomerById(req): Promise<any> {

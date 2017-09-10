@@ -1,6 +1,6 @@
 class Project {
     static DOMAIN: string = 'localhost';
-    static PORT: number = 3000;
+    static PORT: number = 3002;
     static PROJECT_NAME: string = 'Auto Laundry';
     static EXPIRE_DAYS: number = 15;
 

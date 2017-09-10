@@ -1,6 +1,6 @@
-import IItemDetail from './interfaces/IItemDetail'; // eslint-disable-line
+import IProductDetail from './interfaces/IProductDetail'; // eslint-disable-line
 
-class ItemDetail {
+class ProductDetail {
     _id: string;
     description: string;
     price: number;
@@ -8,7 +8,7 @@ class ItemDetail {
     createdAt?: Date;
     updatedAt?: Date;
 
-    constructor(model: IItemDetail) {
+    constructor(model: IProductDetail) {
         if (!model)
             return;
 
@@ -20,10 +20,10 @@ class ItemDetail {
         this.updatedAt = model.updatedAt;
     }
 
-    static parseArray(list: IItemDetail[]): ItemDetail[] {
-        return list.map(item => new ItemDetail(item));
+    static parseArray(list: IProductDetail[]): ProductDetail[] {
+        return list.map(item => new ProductDetail(item));
     }
 }
 
-Object.seal(ItemDetail);
-export default ItemDetail;
+Object.seal(ProductDetail);
+export default ProductDetail;

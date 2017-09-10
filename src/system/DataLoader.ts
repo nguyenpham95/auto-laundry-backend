@@ -3,7 +3,7 @@ import RoleBusiness from '../app/business/RoleBusiness';
 import IRoleBusiness from '../app/business/interfaces/IRoleBusiness';
 
 class DataLoader {
-    private static roleBusiness?: IRoleBusiness = undefined;
+    private static roleBusiness: IRoleBusiness = new RoleBusiness();
 
     static roles: Role[] = [];
 
@@ -15,9 +15,6 @@ class DataLoader {
     }
 
     static async loadRoles(): Promise<void> {
-        if (!DataLoader.roleBusiness)
-            DataLoader.roleBusiness = new RoleBusiness();
-
         DataLoader.roles = await DataLoader.roleBusiness.getAll();
 
         if (process.env.NODE_ENV == 'development')

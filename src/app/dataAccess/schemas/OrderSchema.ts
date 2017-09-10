@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose'; // eslint-disable-line
 import DataAccess from '../DataAccess';
 import IOrder from '../../model/order/interfaces/IOrder'; // eslint-disable-line
-import IOrderDetailSchema from './OrderDetailSchema';
 
 class OrderSchema {
     static get schema() {
@@ -23,12 +22,33 @@ class OrderSchema {
                 default: 0
             },
             details: {
-                type: [IOrderDetailSchema],
+                type: [OrderDetailSchema.schema],
                 default: []
             }
         };
 
         return DataAccess.initSchema(schemaDefinition);
+    }
+}
+
+class OrderDetailSchema {
+    static get schema() {
+        let schemaDefinition: mongoose.SchemaDefinition = {
+            itemId: {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true
+            },
+            description: {
+                type: String,
+                required: true
+            },
+            price: {
+                type: Number,
+                required: true
+            }
+        };
+
+        return new mongoose.Schema(schemaDefinition);
     }
 }
 

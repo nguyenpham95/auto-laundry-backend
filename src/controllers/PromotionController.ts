@@ -11,7 +11,8 @@ class PromotionController extends BaseController {
     constructor() {
         super();
 
-        this.get('/list/:page', this.getPromotions.bind(this));
+        this.get('/list/:page/:limit', this.getPromotions.bind(this));
+        this.get('/list/count', this.getCountPromotions.bind(this));
         this.get('/:_id', this.getPromotionById.bind(this));
         this.post('/', Authenticator.isAuthenticated, this.createPromotion.bind(this));
         this.put('/:_id', Authenticator.isAuthenticated, this.updatePromotion.bind(this));
@@ -19,7 +20,11 @@ class PromotionController extends BaseController {
     }
 
     async getPromotions(req): Promise<any> {
-        return await this.promotionBusiness.getList(req.params.page, 10);
+        return await this.promotionBusiness.getList(req.params.page, req.params.limit);
+    }
+
+    async getCountPromotions(req): Promise<any> {
+        return await this.promotionBusiness.getCount();
     }
 
     async getPromotionById(req): Promise<any> {

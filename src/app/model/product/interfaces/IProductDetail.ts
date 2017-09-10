@@ -1,8 +1,8 @@
 import IBaseModel from '../../common/interfaces/IBaseModel';
 
-interface IItem extends IBaseModel {
+interface IProductDetail extends IBaseModel {
     description: string;
     price: number;
 }
 
-export default IItem;
+export default IProductDetail;
